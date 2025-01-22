@@ -1,9 +1,9 @@
-<template>
+<!--<template>
   <div>
     <h1>Búsqueda de canciones en Deezer</h1>
-    <!-- Componente hijo -->
+    
     <SearchBar @results="handleResults" />
-     <!-- Lista de canciones -->
+     
     <ul v-if="songs.length > 0">
       <li v-for="song in songs" :key="song.id">
         <strong>{{ song.title }}</strong> - {{ song.artist.name }} - {{ song.album.title }} - {{ song.duration }}
@@ -20,14 +20,22 @@ import SearchBar from "../components/SearchBar.vue"; // Importa el componente hi
 const handleResults = (data) => {
   songs.value = data; // Actualiza la lista de canciones
 };
-</script>
-<!--<template>
-    <div>
-      <h1>Buscador</h1>
-      <p>Busca canciones, artistas o álbumes.</p>
-      <p>En esta sección ya se ha configurado una llamada a la API pública de Deezer.</p>
-      <p>Para que salgan los resultados debes entrar en <a href="https://cors-anywhere.herokuapp.com/corsdemo">https://cors-anywhere.herokuapp.com/corsdemo</a></p>
-    </div>
+</script>-->
+<template>
+  <div>
+    <h1>Buscador</h1>
+    <p>Busca canciones, artistas o álbumes.</p>
+    <p>
+      En esta sección ya se ha configurado una llamada a la API pública de
+      Deezer.
+    </p>
+    <p>
+      Para que salgan los resultados debes entrar en
+      <a href="https://cors-anywhere.herokuapp.com/corsdemo"
+        >https://cors-anywhere.herokuapp.com/corsdemo</a
+      >
+    </p>
+  </div>
   <div class="search-page">
     <h1>Resultados del Álbum</h1>
     <div class="album-info">
@@ -45,39 +53,66 @@ const handleResults = (data) => {
           :key="song.id"
           class="song-card"
         >
-          <p><strong>{{ song.title }}</strong></p>
+          <p>
+            <strong>{{ song.title }}</strong>
+          </p>
           <audio :src="song.preview" controls></audio>
+          <p>
+            <button @click="toggleFavorite(song)">
+              {{
+                isFavorite(song.id)
+                  ? "Quitar de favoritos"
+                  : "Añadir a favoritos"
+              }}
+            </button>
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue';
-  
-  const albumData = ref({}); // Guardará los datos del álbum
-  
-  // Función para obtener datos del álbum desde la API de Deezer
-  const fetchAlbumData = async () => {
-    try {
-      const response = await fetch('https://cors-anywhere.herokuapp.com/https://api.deezer.com/album/586206062');
-      if (!response.ok) throw new Error('Error al obtener los datos');
-      albumData.value = await response.json();
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  
-  // Llama a la función al montar el componente
-  onMounted(fetchAlbumData);
-  </script>
-  
-  <style scoped>
-  h1 {
-    color: #dc3545;
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { useFavoritesStore } from '@/stores/favorites';
+
+const albumData = ref({}); // Guardará los datos del álbum
+const favoritesStore = useFavoritesStore();
+
+
+// Función para obtener datos del álbum desde la API de Deezer
+const fetchAlbumData = async () => {
+  try {
+    const response = await fetch(
+      "https://cors-anywhere.herokuapp.com/https://api.deezer.com/album/586206062"
+    );
+    if (!response.ok) throw new Error("Error al obtener los datos");
+    albumData.value = await response.json();
+  } catch (error) {
+    console.error("Error:", error);
   }
-  .search-page {
+};
+
+// Llama a la función al montar el componente
+onMounted(fetchAlbumData);
+
+const toggleFavorite = (song) => {
+  if (favoritesStore.isFavorite(song.id)) {
+    favoritesStore.removeSong(song.id);
+  } else {
+    favoritesStore.addSong(song);
+  }
+};
+
+const isFavorite = (id) => favoritesStore.isFavorite(id);
+
+</script>
+
+<style scoped>
+h1 {
+  color: #dc3545;
+}
+.search-page {
   padding: 20px;
 }
 
@@ -118,5 +153,5 @@ const handleResults = (data) => {
   margin-top: 10px;
   width: 100%;
 }
-  </style>-->
+</style>
   
