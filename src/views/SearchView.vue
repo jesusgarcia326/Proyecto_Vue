@@ -1,4 +1,4 @@
-<!--<template>
+<template>
   <div>
     <h1>Búsqueda de canciones en Deezer</h1>
     
@@ -6,12 +6,36 @@
      
     <ul v-if="songs.length > 0">
       <li v-for="song in songs" :key="song.id">
-        <strong>{{ song.title }}</strong> - {{ song.artist.name }} - {{ song.album.title }} - {{ song.duration }}
+        <strong>{{ song.title }}</strong> - {{ song.artist.name }} - {{ song.album.title }} - {{ song.duration }} - {{ song.artist.name}}
       </li>
     </ul>
     <p v-else>No hay resultados para mostrar</p>
   </div>
 </template>
+
+<!--<template>
+  <div class="container">
+    <h1 class="title">🎵 Búsqueda de Canciones en Deezer</h1>
+
+    <SearchBar @results="handleResults" />
+
+    <div v-if="songs.length > 0" class="song-list">
+      <div v-for="song in songs" :key="song.id" class="song-card">
+        <img :src="song.album.cover_medium" :alt="song.title" class="album-cover" />
+        
+        <div class="song-info">
+          <h3 class="song-title">{{ song.title }}</h3>
+          <p class="artist"><strong>Artista:</strong> {{ song.artist.name }}</p>
+          <p class="album"><strong>Álbum:</strong> {{ song.album.title }}</p>
+          <p class="duration"><strong>Duración:</strong> {{ formatDuration(song.duration) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <p v-else class="no-results">❌ No hay resultados para mostrar</p>
+  </div>
+</template>-->
+
  <script setup>
 import { ref } from "vue";
 import SearchBar from "../components/SearchBar.vue"; // Importa el componente hijo
@@ -20,8 +44,8 @@ import SearchBar from "../components/SearchBar.vue"; // Importa el componente hi
 const handleResults = (data) => {
   songs.value = data; // Actualiza la lista de canciones
 };
-</script>-->
-<template>
+</script>
+<!--<template>
   <div>
     <h1>Buscador</h1>
     <p>Busca canciones, artistas o álbumes.</p>
@@ -84,7 +108,7 @@ const favoritesStore = useFavoritesStore();
 const fetchAlbumData = async () => {
   try {
     const response = await fetch(
-      "https://cors-anywhere.herokuapp.com/https://api.deezer.com/album/586206062"
+      " http://localhost:8080/https://api.deezer.com/search?q=${searchQuery.value}"
     );
     if (!response.ok) throw new Error("Error al obtener los datos");
     albumData.value = await response.json();
@@ -153,5 +177,5 @@ h1 {
   margin-top: 10px;
   width: 100%;
 }
-</style>
+</style>-->
   
